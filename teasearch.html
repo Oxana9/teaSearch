@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tea search</title>
+<meta charset="utf-8" />
+</head>
+<style>
+[v-cloak] {
+  display: none;
+}
+
+*{
+    margin:0;
+    padding:0;
+}
+
+body {
+    font:15px/1.3 'Open Sans', sans-serif;
+    text-align:center;
+}
+
+section, footer, header, aside, nav {
+    display: block;
+}
+
+.bar {
+    background-color:#666600;
+    border-radius: 8px;
+    width: 70%;
+    padding: 14px;
+    margin: 30px auto 20px;
+    position:relative;
+}
+
+.bar input {
+    background:#fff;
+    border: none;
+    width: 100%;
+    line-height: 19px;
+    padding: 11px 0;
+    border-radius: 8px;
+    box-shadow: none;
+    text-align: center;
+    font-size: 15px;
+    font-family: inherit;
+    color: #666600;
+    font-weight: bold;
+    outline: none;
+}
+
+ul {
+    list-style: none;
+    width: 70%;
+    margin: 0 auto;
+    text-align: left;
+}
+
+ul li {
+    border-bottom: 2px dashed #ddd;
+    padding: 10px;
+    overflow: hidden;
+}
+
+ul li img {
+    width:30%;
+    height:30%;
+    float:left;
+    border:none;
+}
+
+ul li p {
+    margin-left: 75px;
+    font-weight: bold;
+    padding-top: 12px;
+    color:#666600;
+}
+
+.btn {
+	background-color: #ccffe6;
+	border: none;
+	color: #666600;
+	width: 15%;
+	height: 5%;
+	border-radius: 8px;
+}
+</style>
+<form id="main" v-cloak>
+    <div class="bar">
+        <input type="text" v-model="searchString" placeholder="Enter the tea type" />
+    </div>
+
+    <ul>
+        <li v-for="tea in filteredTeas">
+            <a v-bind:href="tea.url"><img v-bind:src="tea.image" /></a>
+            <button class="btn" v-on:click.prevent="visible=!visible">{{tea.title}}</button>
+			<p v-if="visible">
+				<span>Brew information:</span>
+				<span>{{tea.recomendations}}</span>
+			</p>
+        </li>
+    </ul>
+</form>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.5/vue.min.js"></script>
+<script>
+var demo = new Vue({
+    el: '#main',
+    data: {
+        searchString: "",
+		visible: true,
+        teas: [
+            {
+                "title": "Black tea",
+                "url": "https://theteaspot.com/loose-leaf-tea-black-tea",
+                "image": "https://theteaspot.com/pub/media/catalog/product/cache/1edcfd625063260ca383f0a6f125bdc4/a/s/assam-tea-z.jpg",
+				"recomendations":"Preparation of black teas requires pure water at boiling point about 212 F. Process: After the leaves are plucked they are allowed to wither. They are then rolled and crushed by hand or by machine. This activates the oxidation processes and the leaves are allowed to turn black. Finally they are fired in ovens to stop the oxidation process."
+            },
+            {
+                "title": "White tea",
+                "url": "https://theteaspot.com/loose-leaf-tea-white-tea",
+                "image": "https://theteaspot.com/pub/media/catalog/product/cache/1edcfd625063260ca383f0a6f125bdc4/o/r/organic-silver-needle-tea-x.jpg",
+				"recomendations":"Preparation of white teas requires pure water at 175 F. Boil, then cool 3 mins. Process: White tea is the most delicate tea in flavor and aroma, as the leaves are not rolled or crushed in the processing. Camellia sinensis bushes that have large, fleshy leaf buds are used for most white teas today. Those leaf buds become Silver Needles white tea. If the next two leaves are picked and processed the same way, they yield White Peony white tea."
+            },
+            {
+                "title": "Green tea",
+                "url": "https://theteaspot.com/loose-leaf-tea-green-tea",
+                "image": "https://theteaspot.com/pub/media/catalog/product/cache/1edcfd625063260ca383f0a6f125bdc4/o/r/organic-gyokuro-tea-x.jpg",
+				"recomendations":"Preparation of green teas requires pure water at 175 F. Boil, then cool 3 mins. Process: The leaves are heated immediately after plucking. The heat prevents the leaves from withering or oxidizing. The dry leaf retains its green color."
+            },
+            {
+                "title": "Oolong tea",
+                "url": "https://theteaspot.com/loose-leaf-tea-oolong-tea",
+                "image": "https://theteaspot.com/pub/media/catalog/product/cache/1edcfd625063260ca383f0a6f125bdc4/o/r/organic-iron-goddess-oolong-x.jpg",
+				"recomendations":"Preparation of oolong teas requires pure water at 195 F. Boil, then cool 2 mins. They may be infused multiple (3–7) times, each steep lasting 1–3 minutes. The caffeine content of oolong teas decreases dramatically from the first to the third brew, yielding about 30–50 mg in first the cup, 15–25 mg in the second, and 5–10 mg in the third.Process: The leaves are withered and then rolled, often by hand. The leaves are allowed to partially oxidize and then are fired in pan or basket to arrest the oxidation process. Oxidation may range from 12–85%. Sometimes charcoal smoke is used to impart a flavor to the tea."
+            },
+            {
+                "title": "Pu'erh",
+                "url": "https://theteaspot.com/loose-leaf-tea-pu-erh",
+                "image": "https://theteaspot.com/pub/media/catalog/product/cache/1edcfd625063260ca383f0a6f125bdc4/o/r/organic-morning-mojo-vanilla-puerh-x.jpg",
+				"recomendations":"Preparation: Requires pure water at boiling point about 212 F. Process: Pu’erh tea is processed through special fermentation by using the semi-fermented green tea of Yunnan large leaf tea. It is black or brown in color. This tea undergoes a secondary fermentation process that takes 6 months to a year, during which the tea is contained in a warm, humid environment, allowing beneficial bacteria and fungal microflora to flourish. The more aged Pu’erh tea is mellow and gives a sweet taste in mouth after drinking."
+            },
+			{
+                "title": "Yerba Mate",
+                "url": "https://theteaspot.com/loose-leaf-yerba-mate-tea",
+                "image": "https://theteaspot.com/pub/media/catalog/product/cache/1edcfd625063260ca383f0a6f125bdc4/o/r/organic-matcha-mate-tea-x.jpg",
+				"recomendations":"Preparation: Requires pure water at 203 F. Boil, then cool 1 min. Yerba Mate should be steeped for 6–7 minutes using hot, but not boiled water. Boiling water can make mate bitter, just like tea. Some people even like to pour cool water over the mate leaves before filling the rest of the cup with hot water to avoid extracting tannins, which create the bitter flavor. Process: After harvesting, yerba mate branches are dried sometimes with a wood fire, imparting a smoky flavor to some styles. Other styles are steamed which results in a grassier flavor, which can be likened to Japanese green tea. The leaves are then chopped to a specific size of leaf cut."
+            },
+			{
+                "title": "Rooibos",
+                "url": "https://theteaspot.com/loose-leaf-herbal-rooibos",
+                "image": "https://theteaspot.com/pub/media/catalog/product/cache/1edcfd625063260ca383f0a6f125bdc4/r/e/red-hot-chai-herbal-z.jpg",
+				"recomendations":"Rooibos is a naturally caffeine-free herbal tea indigenous to the Cedarburg mountain area in South Africa, also known as red bush tea. Its naturally sweet flavor, lack of bitter tannins, and naturally decaf nature makes it a great tea for the whole family."
+            }
+        ]
+    },
+    computed: {
+        filteredTeas: function () {
+            var teas_array = this.teas,
+                searchString = this.searchString;
+
+            if(!searchString){
+                return teas_array;
+            }
+
+            searchString = searchString.trim().toLowerCase();
+
+            teas_array = teas_array.filter(function(item){
+                if(item.title.toLowerCase().indexOf(searchString) !== -1){
+                    return item;
+                }
+            })
+            return teas_array;;
+        }
+    }
+});
+</script>
+</html>
